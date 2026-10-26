@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>HADES - Digital Apps Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  /* =========================================
+     VARIABEL TEMA
+     ========================================= */
+  :root {
+    --bg-main: #050510;
+    --bg-card: rgba(20, 15, 35, 0.85);
+    --border-style: 1px solid rgba(255,255,255,0.1);
+    --box-shadow: none;
+    --font-main: 'Inter', sans-serif;
+    --text-main: #ffffff;
+    --text-dim: #94a3b8;
+    --input-bg: rgba(255, 255, 255, 0.05);
+    
+    /* Warna Neon (Bisa diganti via JS) */
+    --neon-main: #00e5ff; 
+    --neon-glow: rgba(0, 229, 255, 0.4);
+    --video-tint: transparent;
+    --video-filter: none;
+  }
+
+  /* /* =========================================
+   TEMA 2: SSAKURA (SOFT / AESTHETIC)
+   ========================================= */
+body.theme-sakura {
+  --video-tint: transparent;
+  --video-filter: none;
+  --bg-main: #FFF0F5; /* Lavender Blush */
+  --bg-card: #FFFFFF;
+  --text-main: #333333;
+  --text-dim: #666666;
+  --neon-main: #FF69B4; /* Hot Pink */
+  --neon-glow: rgba(255, 105, 180, 0.3);
+  --border-style: 1px solid #FFB6C1; /* Light Pink Border */
+  --box-shadow: 0 8px 20px rgba(255, 182, 193, 0.4);
+  background-image: radial-gradient(circle at 10% 20%, #FFE4E1 0%, transparent 40%), radial-gradient(circle at 90% 80%, #FFC0CB 0%, transparent 40%);
+}
+
+body.theme-sakura .header h1 {
+  -webkit-text-fill-color: var(--neon-main);
+  text-shadow: 0 0 15px var(--neon-glow);
+}
+
+body.theme-sakura .header p { color: #FF69B4; }
+
+body.theme-sakura .search-wrap,
+body.theme-sakura .product-card,
+body.theme-sakura .video-katalog-wrap,
+body.theme-sakura .theme-btn,
+body.theme-sakura .modal-content {
+  background: var(--bg-card) !important;
+  border: var(--border-style) !important;
+  box-shadow: var(--box-shadow) !important;
+}
+
+body.theme-sakura .btn-buy {
+  background: var(--neon-main) !important;
+  color: #fff !important;
+  border: none !important;
+}
+body.theme-sakura .price-main { color: var(--neon-main); text-shadow: none; }
+body.theme-sakura .bottom-nav { background: #FFF0F5; border-top: 1px solid #FFB6C1; }
+body.theme-sakura .nav-item { color: var(--neon-main); text-shadow: none; }
+body.theme-sakura .credit-text { color: #FF69B4; }
+  /* =========================================
+     TEMA 3: COMIC MODE (POP ART)
+     ========================================= */
+  body.theme-pixel {
+    --video-tint: transparent; --video-filter: none;
+    --bg-main: #100b1f; --bg-card: #211638; --text-main: #f8f4ff; --text-dim: #b8a9d6;
+    --neon-main: #a3ff12; --neon-glow: rgba(163,255,18,.25);
+    --border-style: 3px solid #a3ff12; --box-shadow: 5px 5px 0 #05030a;
+    --font-main: 'Press Start 2P', monospace;
+    background-image: linear-gradient(rgba(163,255,18,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(163,255,18,.045) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+  body.theme-pixel .header h1 { -webkit-text-fill-color:#a3ff12; text-shadow:3px 3px 0 #5c2d91; font-size:30px; letter-spacing:2px; }
+  body.theme-pixel .header p { color:#d9c9ff; font-weight:bold; letter-spacing:2px; }
+  body.theme-pixel .product-card, body.theme-pixel .search-wrap, body.theme-pixel .video-katalog-wrap, body.theme-pixel .theme-btn, body.theme-pixel .modal-content {
+    border:var(--border-style)!important; box-shadow:var(--box-shadow)!important; background:var(--bg-card)!important; border-radius:3px!important;
+  }
+  body.theme-pixel .product-card:hover { transform:translate(-2px,-2px); box-shadow:7px 7px 0 #05030a!important; }
+  body.theme-pixel .card-title { font-size:10px; line-height:1.7; letter-spacing:0; }
+  body.theme-pixel .price-main { color:#a3ff12; text-shadow:none; font-size:12px; }
+  body.theme-pixel .btn-buy { border:2px solid #a3ff12!important; background:#5c2d91!important; color:#fff!important; box-shadow:3px 3px 0 #05030a!important; font-size:9px; letter-spacing:0; border-radius:2px!important; }
+  body.theme-pixel .btn-buy:active { transform:translate(2px,2px); box-shadow:1px 1px 0 #05030a!important; }
+  body.theme-pixel .bottom-nav { border-top:3px solid #a3ff12; background:#100b1f; }
+  body.theme-pixel .nav-item { color:#a3ff12; text-shadow:none; }
+  body.theme-pixel .credit-text { color:#d9c9ff; font-weight:bold; }
+  /* =========================================
+     BASE STYLE
+     ========================================= */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: var(--font-main);
+    background-color: var(--bg-main);
+    background-image: radial-gradient(circle at 10% 20%, rgba(168, 85, 247, 0.15) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(0, 229, 255, 0.15) 0%, transparent 40%);
+    color: var(--text-main);
+    display: flex; justify-content: center;
+    min-height: 100vh; padding-bottom: 80px; overflow-x: hidden;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* LOADING SCREEN */
+  #loadingScreen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+    background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center;
+    transition: opacity 0.8s ease, visibility 0.8s;
+  }
+  #loadingScreen.hide { opacity: 0; visibility: hidden; }
+  #loadingScreen video { width: 100%; height: 100%; object-fit: cover; }
+  /* Judul dan keunggulan pada loading screen */
+.loading-welcome {
+  width: 90%; text-align: center; color: #ffffff; font-size: clamp(20px, 5vw, 29px);
+  font-weight: 900; letter-spacing: 1.5px; line-height: 1.25;
+  text-shadow: 0 0 12px rgba(0,225,255,.65); margin-bottom: 0;
+}
+.loading-welcome span { color: #00e1ff; }
+.loading-benefits {
+  width: min(88%, 360px); color: rgba(255,255,255,.86); text-align: center;
+  font-size: 10px; line-height: 1.8; letter-spacing: .25px;
+  text-shadow: 0 1px 5px rgba(0,0,0,.95); margin-top: -8px;
+}
+.loading-benefits strong { color: #00e1ff; font-weight: 800; }
+
+/* LOADING: pemindai sidik jari futuristik */
+.btn-start-loading {
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px;
+  background:radial-gradient(ellipse at center, rgba(0,210,255,.08), transparent 48%);
+  border:0; width:100%; height:100%; position:absolute; z-index:10000; cursor:pointer;
+  -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; touch-action:none;
+}
+.touch-circle-wrap {
+  position:relative; width:148px; height:148px; display:flex; align-items:center; justify-content:center;
+  border-radius:50%; background:radial-gradient(circle, rgba(0,225,255,.16) 0%, rgba(0,225,255,.04) 48%, transparent 72%);
+  box-shadow:0 0 28px rgba(0,210,255,.14), inset 0 0 24px rgba(0,210,255,.08);
+}
+.touch-circle-wrap::before, .touch-circle-wrap::after {
+  content:""; position:absolute; border:1px solid rgba(0,225,255,.35); border-radius:50%;
+  inset:8px; animation:scannerOrbit 4s linear infinite;
+}
+.touch-circle-wrap::after { inset:18px; border-style:dashed; border-color:rgba(255,255,255,.2); animation-direction:reverse; animation-duration:12s; }
+.fingerprint-icon {
+  position:absolute; z-index:3; width:82px; height:82px; display:flex; align-items:center; justify-content:center;
+  color:#dffcff; border-radius:50%; background:linear-gradient(145deg,rgba(0,225,255,.16),rgba(0,50,90,.2));
+  border:1px solid rgba(0,225,255,.45); box-shadow:0 0 18px rgba(0,220,255,.25), inset 0 0 18px rgba(0,220,255,.12);
+  animation:pulseFingerprint 1.8s ease-in-out infinite;
+}
+.fingerprint-icon svg { filter:drop-shadow(0 0 6px #00dfff); }
+.fingerprint-icon::after { content:""; position:absolute; left:8px; right:8px; top:10px; height:2px; border-radius:100%; background:#9ffaff; box-shadow:0 0 10px #00dfff; opacity:.85; animation:scanLine 1.7s ease-in-out infinite alternate; }
+.progress-ring { position:absolute; inset:0; width:148px; height:148px; transform:rotate(-90deg); z-index:4; overflow:visible; }
+.progress-ring__circle { stroke:#00e5ff; stroke-dasharray:339.292; stroke-dashoffset:339.292; transition:stroke-dashoffset .1s linear; filter:drop-shadow(0 0 5px #00dfff) drop-shadow(0 0 12px rgba(0,225,255,.7)); stroke-linecap:round; }
+.touch-text { font-family:'Inter',sans-serif; font-size:.82rem; font-weight:800; letter-spacing:2.5px; color:#fff; text-transform:uppercase; text-align:center; padding:12px 20px; border:1px solid rgba(0,225,255,.28); border-radius:999px; background:rgba(3,14,27,.72); box-shadow:0 0 22px rgba(0,210,255,.12); text-shadow:0 0 12px rgba(0,220,255,.7); }
+@keyframes pulseFingerprint { 0%,100% { transform:scale(1); opacity:1; } 50% { transform:scale(1.06); opacity:.82; } }
+@keyframes scannerOrbit { to { transform:rotate(360deg); } }
+@keyframes scanLine { from { transform:translateY(0); opacity:.35; } to { transform:translateY(56px); opacity:1; } }
+@keyframes blinkText { 0%,100% { opacity:1; } 50% { opacity:.65; } }
+#loadingScreen.hide .btn-start-loading { pointer-events:none; }
+  .btn-skip-loading {
+    position: absolute; top: 20px; right: 20px; background: transparent; border: 1px solid rgba(255,255,255,0.5);
+    color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    cursor: pointer; z-index: 10000; backdrop-filter: blur(5px); transition: 0.3s;
+  }
+  .btn-skip-loading:hover { background: rgba(255,255,255,0.2); }
+
+  /* KONTEN UTAMA */
+  .app-container { width: 100%; max-width: 480px; padding: 20px; display: none; }
+  .app-container.show { display: block; animation: fadeIn 0.5s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* HEADER & TOMBOL TEMA */
+  .header { text-align: center; margin-bottom: 20px; position: relative; }
+  .header h1 {
+    font-size: 32px; font-weight: 900; font-style: italic; letter-spacing: 2px;
+    background: linear-gradient(90deg, #fff, var(--neon-main));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px var(--neon-glow); transition: 0.3s;
+  }
+  .header p { font-size: 10px; letter-spacing: 3px; color: var(--text-dim); margin-top: 4px; }
+  
+  /* Kontainer Tombol Tema */
+  .theme-controls {
+    position: absolute; top: 0; right: 0; display: flex; gap: 8px;
+  }
+  .theme-btn {
+    background: var(--input-bg); border: 1px solid var(--neon-main);
+    padding: 8px; border-radius: 50%; cursor: pointer; color: var(--neon-main);
+    display: flex; align-items: center; justify-content: center; transition: 0.3s;
+  }
+  .theme-btn:hover { box-shadow: 0 0 15px var(--neon-glow); }
+
+  /* MENU PILIH TEMA: Neon, Sakura, Pixel */
+  .theme-menu-backdrop { position: fixed; inset: 0; z-index: 20000; background: rgba(0,0,0,.62); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; padding: 22px; }
+  .theme-menu-backdrop.open { display: flex; animation: fadeIn .18s ease; }
+  .theme-menu { width: 100%; max-width: 390px; background: #17191f; border: 1px solid rgba(255,255,255,.1); border-radius: 24px; padding: 18px; box-shadow: 0 18px 55px rgba(0,0,0,.6); }
+  .theme-menu-title { color: #fff; font-size: 15px; font-weight: 800; letter-spacing: 1.5px; margin: 2px 4px 14px; }
+  .theme-option { width: 100%; display: flex; align-items: center; gap: 14px; padding: 15px 13px; margin: 9px 0; text-align: left; color: #f8fafc; background: #20232b; border: 1px solid #343844; border-radius: 16px; cursor: pointer; transition: .2s; }
+  .theme-option:active { transform: scale(.98); }
+  .theme-option .theme-option-icon { width: 44px; height: 44px; flex: 0 0 44px; display:flex; align-items:center; justify-content:center; border-radius: 13px; }
+  .theme-option svg { width: 25px; height: 25px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .theme-option strong { display:block; font-size: 15px; margin-bottom: 3px; }
+  .theme-option small { display:block; font-size: 11px; color:#a7afc2; }
+  .theme-option .theme-check { margin-left:auto; font-size: 19px; opacity:0; }
+  .theme-option.active .theme-check { opacity:1; }
+  .theme-option[data-theme="0"] { --option-color:#00e5ff; }
+  .theme-option[data-theme="1"] { --option-color:#ff69b4; }
+  .theme-option[data-theme="2"] { --option-color:#ffc928; }
+  .theme-option .theme-option-icon { color:var(--option-color); background:color-mix(in srgb, var(--option-color) 12%, #15171d); }
+  .theme-option.active, .theme-option:focus-visible { border-color:var(--option-color); box-shadow:0 0 18px color-mix(in srgb, var(--option-color) 24%, transparent); }
+  .theme-menu-backdrop.theme-required .theme-menu-close { display:none !important; }
+  .theme-menu-close { width:100%; margin-top:8px; padding:11px; border:0; border-radius:12px; color:#cbd5e1; background:#2a2d36; font-weight:700; cursor:pointer; }
+
+  /* VIDEO KATALOG */
+  .video-katalog-wrap {
+    position: relative; width: 100%; border-radius: 16px; overflow: hidden;
+    margin-bottom: 20px; border: var(--border-style);
+    box-shadow: 0 0 15px rgba(0,0,0,0.5); background: #000; cursor: pointer;
+    transition: 0.3s;
+  }
+  .video-katalog-wrap video { width: 100%; display: block; pointer-events: none; position: relative; z-index: 1; filter: none !important; transition: none; }
+  .video-katalog-wrap::after { content: ''; position: absolute; inset: 0; z-index: 2; background: transparent !important; mix-blend-mode: normal; pointer-events: none; }
+  .btn-play-katalog {
+    display: none !important;
+    position: absolute; bottom: 15px; right: 15px; width: 40px; height: 40px;
+    background: transparent; border: none; cursor: pointer; z-index: 10;
+    display: flex; align-items: center; justify-content: center; transition: 0.3s;
+  }
+  .btn-play-katalog svg { width: 35px; height: 35px; color: rgba(255,255,255,0.8); filter: drop-shadow(0 0 5px rgba(0,0,0,0.8)); }
+  .btn-pause-katalog {
+    display: none !important;
+    position: absolute; top: 15px; right: 15px; width: 40px; height: 40px;
+    background: transparent; border: none; cursor: pointer; z-index: 10;
+    display: flex; align-items: center; justify-content: center; filter: drop-shadow(0 0 5px rgba(0,0,0,0.8));
+  }
+  .btn-pause-katalog svg { width: 30px; height: 30px; color: #fff; }
+  .hide { display: none !important; }
+
+  /* SEARCH BAR */
+  .search-wrap {
+    display: flex; align-items: center; background: var(--input-bg);
+    border: 1px solid var(--neon-main); border-radius: 30px; padding: 12px 20px;
+    margin-bottom: 20px; box-shadow: 0 0 10px var(--neon-glow); transition: 0.3s;
+  }
+  .search-wrap svg { width: 20px; height: 20px; color: var(--text-dim); margin-right: 10px; }
+  .search-wrap input { background: none; border: none; outline: none; color: var(--text-main); width: 100%; font-size: 14px; font-family: inherit;}
+
+  /* GRID KATALOG */
+  .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+  .product-card {
+  background: var(--bg-card); border: var(--border-style);
+  border-radius: 16px; padding: 15px; display: flex; flex-direction: column;
+  position: relative; backdrop-filter: blur(10px); transition: all 0.3s ease; cursor: pointer;
+  box-shadow: var(--box-shadow);
+  }
+  .product-card:hover { border-color: var(--neon-main); box-shadow: 0 0 20px var(--neon-glow); transform: translateY(-5px); }
+  .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+  .card-icon { 
+  width: 55px; 
+  height: 55px; 
+  border-radius: 12px; 
+  object-fit: cover; 
+  border: 1px solid rgba(255,255,255,0.1); 
+  transition: transform 0.3s ease; /* Tambahan untuk animasi */
+}
+
+/* Efek Zoom saat kartu disentuh */
+.product-card:hover .card-icon,
+.product-card:active .card-icon {
+  transform: scale(1.15) rotate(3deg);
+}
+  .card-title { font-size: 14px; font-weight: 800; line-height: 1.2; }
+  .card-price-wrap { margin-top: auto; margin-bottom: 12px; display: flex; align-items: center; }
+  .price-main { font-size: 16px; font-weight: 900; color: var(--neon-main); text-shadow: 0 0 10px var(--neon-glow); }
+  .btn-buy {
+    width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--neon-main);
+    padding: 10px; border-radius: 10px; color: #fff; font-size: 12px; font-weight: 700;
+    display: flex; justify-content: center; align-items: center; gap: 6px; transition: 0.3s;
+  }
+  .btn-buy svg { width: 14px; height: 14px; }
+  .product-card:hover .btn-buy { background: var(--neon-main); color: #000; box-shadow: 0 0 15px var(--neon-glow); }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 480px; background: rgba(5, 5, 16, 0.95);
+    border-top: 1px solid var(--neon-main); display: flex; justify-content: center;
+    padding: 12px 0 15px; z-index: 100; flex-direction: column; align-items: center;
+    transition: 0.3s;
+  }
+  .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--neon-main); font-size: 10px; font-weight: 600; text-shadow: 0 0 10px var(--neon-glow); margin-bottom: 5px; }
+  .nav-item svg { width: 22px; height: 22px; }
+  .credit-text { font-size: 9px; color: var(--text-dim); letter-spacing: 1px; opacity: 0.7; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s;
+  }
+  .modal-overlay.show { opacity: 1; pointer-events: auto; }
+  .modal-content {
+    background: var(--bg-card); border: var(--border-style);
+    box-shadow: 0 0 30px var(--neon-glow);
+    border-radius: 20px; padding: 25px; width: 90%; max-width: 400px; position: relative;
+  }
+  .close-btn { position: absolute; top: 15px; right: 15px; background: none; border: none; color: var(--text-dim); cursor: pointer; }
+  .modal-title { text-align: center; color: var(--neon-main); margin-bottom: 20px; text-shadow: 0 0 10px var(--neon-glow); }
+  label { display: block; font-size: 12px; color: var(--text-dim); margin-bottom: 6px; }
+  input, select {
+    width: 100%; padding: 12px; margin-bottom: 15px; background: var(--input-bg);
+    border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; color: var(--text-main); outline: none;
+    font-family: inherit;
+  }
+  input:focus, select:focus { border-color: var(--neon-main); box-shadow: 0 0 10px var(--neon-glow); }
+  /* Dropdown varian custom: konsisten dengan tema Pixel, bukan menu native Android */
+  #varianSelect { display:none; }
+  .variant-picker { position:relative; width:100%; margin:0 0 15px; z-index:4; }
+  .variant-trigger { box-sizing:border-box; display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; min-height:44px; padding:11px 12px; background:var(--input-bg); color:var(--text-main); border:1px solid rgba(255,255,255,.22); border-radius:10px; font:inherit; font-size:12px; text-align:left; cursor:pointer; }
+  .variant-trigger .variant-current { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .variant-trigger .variant-arrow { flex:0 0 auto; transition:transform .18s ease; }
+  .variant-picker.open .variant-arrow { transform:rotate(180deg); }
+  .variant-options { display:none; position:absolute; top:calc(100% + 5px); left:0; right:0; max-height:38vh; overflow-y:auto; overscroll-behavior:contain; background:#21172f; border:2px solid #a3ff12; border-radius:3px; box-shadow:4px 4px 0 #05030a, 0 8px 24px rgba(0,0,0,.6); padding:4px; z-index:30; }
+  .variant-picker.open .variant-options { display:block; }
+  .variant-option { display:flex; align-items:center; justify-content:space-between; gap:8px; width:100%; box-sizing:border-box; padding:11px 9px; margin:0; background:transparent; color:#f8f4ff; border:0; border-bottom:1px solid rgba(163,255,18,.2); border-radius:0; font-family:inherit; font-size:11px; line-height:1.4; text-align:left; cursor:pointer; }
+  .variant-option:last-child { border-bottom:0; }
+  .variant-option:active, .variant-option.selected { background:rgba(163,255,18,.15); color:#a3ff12; }
+  .variant-option .variant-check { color:#a3ff12; font-weight:900; flex:0 0 auto; }
+  body:not(.theme-pixel) .variant-options { background:var(--bg-card); border-color:var(--neon-main); }
+  body:not(.theme-pixel) .variant-option { color:var(--text-main); border-bottom-color:rgba(255,255,255,.1); }
+  body:not(.theme-pixel) .variant-option:active, body:not(.theme-pixel) .variant-option.selected { background:var(--input-bg); color:var(--neon-main); }
+  .price-total-box {
+    background: rgba(255,255,255,0.05); border: 1px dashed var(--neon-main);
+    padding: 12px; border-radius: 10px; margin-bottom: 15px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .price-total-box span { font-size: 13px; color: var(--text-dim); }
+  .price-total-box strong { font-size: 18px; color: var(--neon-main); }
+  .btn-submit {
+    width: 100%; padding: 14px; background: var(--neon-main);
+    color: #000; font-weight: 800; font-size: 14px; border: none; border-radius: 10px;
+    cursor: pointer; text-transform: uppercase; box-shadow: 0 0 15px var(--neon-glow);
+  }
+
+  .payment-info{max-height:78vh;overflow:auto;text-align:center}
+  .payment-qr{width:min(100%,300px);aspect-ratio:1;object-fit:contain;background:#fff;padding:10px;border-radius:14px;margin:10px auto;display:block}
+  .payment-hint{font-size:12px;line-height:1.6;color:var(--text-dim);margin:10px 0}
+  .payment-order-id{font-size:11px;overflow-wrap:anywhere;color:var(--text-dim);margin:8px 0}
+  #paymentProofFile{margin-top:8px}
+  .payment-secondary{width:100%;margin-top:8px;padding:12px;border-radius:10px;border:1px solid var(--neon-main);background:transparent;color:var(--text-main);font-weight:800}
+  .payment-close-x{position:sticky;top:0;float:right;margin:-12px -10px 0 10px;width:36px;height:36px;border:1px solid rgba(255,255,255,.18);border-radius:50%;background:rgba(255,255,255,.08);color:var(--text-main);font-size:24px;line-height:1;cursor:pointer;z-index:5}
+  .payment-status{clear:both;margin:14px 0;padding:12px;border-radius:12px;font-size:13px;font-weight:800;background:rgba(255,190,60,.12);border:1px solid rgba(255,190,60,.35);color:#ffd166}
+  .payment-status.processing{background:rgba(0,190,255,.12);border-color:rgba(0,190,255,.4);color:#67e8f9}
+  .payment-status.success{background:rgba(0,200,100,.12);border-color:rgba(0,200,100,.4);color:#4ade80}
+  .payment-status.failed{background:rgba(255,60,80,.12);border-color:rgba(255,60,80,.4);color:#fb7185}
+
+
+  /* Fitur tambahan katalog HADES: mengikuti tema aktif */
+  .extra-store-tools{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}
+  .extra-store-tools button,.extra-card-actions button{border:1px solid var(--neon-main);background:var(--input-bg);color:var(--text-main);border-radius:9px;padding:8px 10px;font-weight:800;font-size:12px;cursor:pointer}
+  .extra-store-tools button.active,.extra-card-actions button.active{background:var(--neon-main);color:#111}
+  .extra-section-title{font-weight:900;letter-spacing:1px;color:var(--neon-main);margin:14px 0 8px;font-size:13px}
+  .extra-card-actions{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+  .extra-card-actions button{flex:1;min-width:65px;padding:7px 5px}
+  .extra-note{font-size:12px;color:var(--text-dim);padding:8px 0}
+  #extraComparePanel{display:none;margin:10px 0;padding:12px;border:1px solid var(--neon-main);border-radius:12px;background:var(--input-bg);color:var(--text-main)}
+  #extraComparePanel table{width:100%;font-size:12px;border-collapse:collapse} #extraComparePanel td,#extraComparePanel th{padding:6px;border-bottom:1px solid var(--neon-main);text-align:left}
+
+  /* Fitur produk yang dikirim dari Admin Panel */
+  .product-features { display:flex; flex-wrap:wrap; gap:5px; margin:0 0 12px; }
+  .product-feature-chip { display:inline-flex; align-items:center; max-width:100%; padding:4px 7px; border:1px solid var(--neon-main); border-radius:7px; background:var(--input-bg); color:var(--text-main); font-size:10px; font-weight:800; line-height:1.25; overflow-wrap:anywhere; }
+  /* Fitur produk berupa dropdown, serupa dengan Varian Harga / Paket */
+  #modalProductFeatures { width:100%; margin:0 0 16px; }
+  #modalProductFeatures .feature-dropdown { width:100%; }
+  #modalProductFeatures .feature-summary { box-sizing:border-box; display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; min-height:48px; padding:12px 14px; border:1px solid rgba(255,255,255,0.2); border-radius:10px; background:var(--input-bg); color:var(--text-main); font-size:14px; font-weight:700; cursor:pointer; list-style:none; }
+  #modalProductFeatures .feature-summary::-webkit-details-marker { display:none; }
+  #modalProductFeatures .feature-summary::marker { content:""; }
+  #modalProductFeatures .feature-summary::after { content:""; width:9px; height:9px; border-right:2px solid currentColor; border-bottom:2px solid currentColor; transform:rotate(45deg) translateY(-2px); transition:transform .2s ease; flex:0 0 auto; }
+  #modalProductFeatures details[open] .feature-summary::after { transform:rotate(225deg) translate(-2px,-1px); }
+  #modalProductFeatures .feature-list { display:flex; flex-direction:column; gap:8px; padding-top:9px; }
+  #modalProductFeatures .product-feature-chip { display:flex; box-sizing:border-box; width:100%; max-width:100%; min-height:42px; padding:10px 14px; border-radius:10px; font-size:13px; font-weight:700; text-align:left; justify-content:flex-start; background:var(--input-bg); color:var(--text-main); border:1px solid rgba(255,255,255,0.2); box-shadow:none; }
+  body.theme-pixel #modalProductFeatures .feature-summary, body.theme-pixel #modalProductFeatures .product-feature-chip { border:2px solid #a3ff12; border-radius:2px; box-shadow:2px 2px 0 #05030a; color:#f8f4ff; }
+  body.theme-sakura #modalProductFeatures .feature-summary, body.theme-sakura #modalProductFeatures .product-feature-chip { color:#c21870; background:#fff5fa; border-color:#efb2d2; }
+  body.theme-pixel .product-feature-chip { border:2px solid #a3ff12; border-radius:2px; box-shadow:2px 2px 0 #05030a; color:#f8f4ff; }
+  body.theme-sakura .product-feature-chip { color:#c21870; background:#fff5fa; }
+
+  /* Penyamaan kartu katalog: tombol aksi selalu sejajar */
+  .product-grid { align-items: start; grid-auto-rows: auto; grid-auto-flow: row; }
+  .product-card { height: auto; min-width: 0; align-self: start; }
+  .card-top { min-height: 70px; align-items: center; }
+  .card-top > div { min-width: 0; }
+  .card-title { overflow-wrap: anywhere; }
+  .card-price-wrap { min-height: 28px; }
+  .extra-card-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    flex-wrap: nowrap;
+    width: 100%;
+    margin-top: 9px;
+  }
+  .extra-card-actions button {
+    width: 100%;
+    min-width: 0;
+    flex: initial;
+    padding: 8px 3px;
+    font-size: clamp(10px, 2.8vw, 12px);
+    line-height: 1.25;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    min-height: 42px;
+  }
+  @media (max-width: 360px) {
+    .product-grid { gap: 10px; }
+    .product-card { padding: 11px; }
+    .card-top { gap: 8px; }
+    .card-icon { width: 48px; height: 48px; flex: 0 0 48px; }
+    .extra-card-actions { gap: 4px; }
+    .extra-card-actions button { font-size: 10px; }
+  }
+
+
+
+/* FIX MOBILE SCROLL REPAINT: keep complete product cards visible while scrolling */
+.product-grid {
+  position: relative;
+  isolation: isolate;
+  contain: layout;
+}
+.product-card {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  transform: none;
+  will-change: auto;
+  contain: none;
+  overflow: visible;
+}
+.product-card:hover,
+.product-card:active {
+  transform: none !important;
+}
+.product-card .card-top,
+.product-card .card-icon,
+.product-card .card-title,
+.product-card .card-price-wrap,
+.product-card .price-main,
+.product-card .btn-buy,
+.product-card .extra-card-actions {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+@media (max-width: 768px) {
+  .product-card { transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen">
+  <video id="loadingVideo" playsinline>
+    <!-- LINK BARU SUDAH DIPASANG -->
+    <source src="https://yourimageshare.com/ib/oX6oopzdft.mp4" type="video/mp4">
+  </video>
+  
+  <audio id="bgMusic" loop>
+    <source src="" type="audio/mpeg">
+  </audio>
+
+<!-- Tombol Sentuh (Tekan & Tahan) -->
+<button class="btn-start-loading" id="btnStartLoading" 
+        onmousedown="startHold()" onmouseup="cancelHold()" onmouseleave="cancelHold()" 
+        ontouchstart="startHold()" ontouchend="cancelHold()">
+  
+  <div class="loading-welcome">WELCOME TO <span>HADES MARKET</span></div>
+  
+  <div class="touch-circle-wrap">
+    <!-- SVG Lingkaran Progress -->
+    <svg class="progress-ring" width="120" height="120">
+      <circle cx="74" cy="74" r="54" stroke="rgba(255,255,255,.16)" stroke-width="4" fill="transparent"/>
+      <circle class="progress-ring__circle" stroke-width="4" fill="transparent" r="54" cx="74" cy="74"/>
+    </svg>
+    
+    <!-- Ikon Sidik Jari -->
+    <div class="fingerprint-icon">
+      <svg viewBox="0 0 64 64" width="58" height="58" fill="none" stroke="currentColor" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M32 8c-13.2 0-23.5 10.2-23.5 23.1"/><path d="M32 15.5c-9 0-16 7-16 16.2 0 7.1-1.2 13.1-4.3 18.5"/>
+        <path d="M32 23c-4.8 0-8.5 3.8-8.5 8.7 0 10.1-1.6 17.2-5.6 23.2"/><path d="M32 30.5c-.8 0-1.5.7-1.5 1.7 0 9.1-1.1 15.9-3.8 22.5"/>
+        <path d="M32 8c13.2 0 23.5 10.2 23.5 23.1 0 5.6-.9 10.7-2.7 15.8"/><path d="M32 15.5c9 0 16 7 16 16.2 0 6.8-.8 12.4-2.8 17.5"/>
+        <path d="M32 23c4.8 0 8.5 3.8 8.5 8.7 0 7.2-.7 13-2.4 18.2"/><path d="M32 38.5c-.1 5.3-.7 10-2 14.7"/>
+      </svg>
+    </div>
+  </div>
+  
+  <div class="touch-text" id="holdText">TEKAN & TAHAN UNTUK MASUK</div>
+
+  <div class="loading-benefits">
+    <strong>CEPAT & PRAKTIS</strong> · Katalog aplikasi mudah dijelajahi<br>
+    <strong>PEMBAYARAN MUDAH</strong> · Pilihan metode pembayaran tersedia<br>
+    <strong>BANTUAN ADMIN</strong> · Hubungi admin untuk bantuan pesanan
+  </div>
+</button>
+
+  <button class="btn-skip-loading hide" id="btnSkipLoading" onclick="skipLoading()">Lewati ➔</button>
+</div>
+<!-- KONTEN UTAMA -->
+<div class="app-container" id="appContainer">
+  <div class="header">
+    <h1>HADES</h1>
+    <p>DIGITAL APPS STORE</p>
+    
+    <!-- TOMBOL KONTROL TEMA -->
+    <div class="theme-controls">
+      <!-- Tombol Palet (Ganti Warna Neon) -->
+      <button class="theme-btn" onclick="gantiWarnaNeon()" title="Ganti Warna Neon">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+      </button>
+      <!-- Tombol Ganti Mode (Dark/Pixel/Neon) -->
+      <button class="theme-btn" onclick="bukaMenuTema()" title="Pilih Tema">
+        <svg id="modeIcon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="theme-menu-backdrop" id="themeMenuBackdrop" onclick="klikBackdropTema(event)" aria-hidden="true">
+    <div class="theme-menu" role="dialog" aria-modal="true" aria-label="Pilih tema">
+      <div class="theme-menu-title">PILIH TEMA TAMPILAN</div>
+      <button class="theme-option" data-theme="0" onclick="pilihTema(0)">
+        <span class="theme-option-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg></span>
+        <span><strong>Neon</strong><small>Cyberpunk · Cyan</small></span><span class="theme-check">✓</span>
+      </button>
+      <button class="theme-option" data-theme="1" onclick="pilihTema(1)">
+        <span class="theme-option-icon"><svg viewBox="0 0 24 24"><path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/></svg></span>
+        <span><strong>Sakura</strong><small>Soft · Pink</small></span><span class="theme-check">✓</span>
+      </button>
+      <button class="theme-option" data-theme="2" onclick="pilihTema(2)">
+        <span class="theme-option-icon"><svg viewBox="0 0 24 24"><path d="M12 3l2.2 5.2L20 6l-2.2 5.8L23 14l-5.5 2.2L19 22l-7-3-7 3 1.5-5.8L1 14l5.2-2.2L4 6l5.8 2.2L12 3Z"/><path d="M9 12h.01M15 12h.01"/></svg></span>
+        <span><strong>Pixel</strong><small>8-bit · Retro Pixel</small></span><span class="theme-check">✓</span>
+      </button>
+      <button class="theme-menu-close" onclick="tutupMenuTema()">Tutup</button>
+    </div>
+  </div>
+
+  <div id="storeBanner" style="display:none;margin:12px 0;padding:14px;border:1px solid var(--neon-main,#00e5ff);border-radius:12px;text-align:center;overflow:hidden"></div>
+
+  <!-- VIDEO KATALOG -->
+  <div class="video-katalog-wrap" id="videoKatalogArea">
+    <video id="katalogVideo" playsinline loop preload="metadata">
+      <source src="https://yourimageshare.com/ib/4B8VItuqxY.mp4" type="video/mp4">
+    </video>
+    
+    <button class="btn-pause-katalog hide" id="btnPauseKatalog" onclick="pauseKatalog(event)">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+    </button>
+
+    <button class="btn-play-katalog" id="btnPlayKatalog" onclick="playKatalog(event)">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+  </div>
+
+  <!-- SEARCH BAR -->
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="searchInput" placeholder="Cari aplikasi..." onkeyup="filterProduk()">
+  </div>
+
+  <div class="extra-store-tools" aria-label="Fitur katalog tambahan">
+    <button type="button" id="showFeaturedBtn" onclick="toggleFeatured()">★ Produk unggulan</button>
+    <button type="button" id="showWishlistBtn" onclick="toggleWishlistView()">♡ Wishlist <span id="wishlistCount">0</span></button>
+    <button type="button" id="showCompareBtn" onclick="showCompare()">⇄ Bandingkan <span id="compareCount">0</span>/3</button>
+  </div>
+  <div id="extraFeaturedArea" style="display:none"><div class="extra-section-title">★ PRODUK UNGGULAN</div><div class="product-grid" id="extraFeaturedGrid"></div></div>
+  <div id="extraComparePanel"></div>
+  <div id="extraViewNote" class="extra-note" style="display:none"></div>
+  <button id="contactStoreBtn" type="button" onclick="hubungiTokoLangsung()" style="width:100%;margin:0 0 16px;padding:11px 14px;border:1px solid var(--neon-main);border-radius:12px;background:var(--input-bg);color:var(--text-main);font-weight:800;cursor:pointer">Hubungi Admin HADES</button>
+  <div class="product-grid" id="katalogGrid"></div>
+</div>
+
+<!-- BOTTOM NAV & CREATOR -->
+<div class="bottom-nav" id="bottomNav" style="display:none;">
+  <div class="nav-item active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+    Beranda
+  </div>
+  <div class="credit-text">Created by HADES-X</div>
+</div>
+
+<!-- MODAL PEMBELIAN -->
+<div class="modal-overlay" id="modalForm">
+  <div class="modal-content">
+    <button class="close-btn" onclick="tutupModal()">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <h3 class="modal-title" id="modalTitle">Pilih Paket</h3>
+    <div id="modalProductFeatures" class="product-features" aria-label="Fitur produk"></div>
+    
+    <label>Varian Harga / Paket</label>
+    <div class="variant-picker" id="variantPicker">
+      <button class="variant-trigger" id="variantTrigger" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleVariantPicker()">
+        <span class="variant-current" id="variantCurrent">Pilih varian paket</span><span class="variant-arrow" aria-hidden="true">⌄</span>
+      </button>
+      <div class="variant-options" id="variantOptions" role="listbox" aria-label="Pilihan varian harga"></div>
+    </div>
+    <select id="varianSelect" onchange="updateHarga()" aria-hidden="true" tabindex="-1"></select>
+
+    <label>Metode Pembayaran</label>
+    <select id="pembayaran">
+      <option value="QRIS">QRIS</option>
+      <option value="DANA">DANA</option>
+    </select>
+
+    <div class="price-total-box">
+      <span>Total Tagihan</span>
+      <strong id="displayHarga">Rp 0</strong>
+    </div>
+
+    <label>Nama Pembeli</label>
+    <input type="text" id="nama" placeholder="Masukkan nama kamu">
+
+    <button class="btn-submit" id="btnSubmit" onclick="kirimPesanan()">Pesan Sekarang</button>
+  </div>
+</div>
+
+<!-- MODAL PEMBAYARAN QRIS -->
+<div class="modal-overlay" id="modalPembayaran" aria-modal="true" role="dialog" aria-labelledby="paymentTitle">
+  <div class="modal-content payment-info">
+    <button class="payment-close-x" type="button" aria-label="Keluar dari pembayaran" title="Keluar dari pembayaran" onclick="tutupModalPembayaran(true)">×</button>
+    <h3 class="modal-title" id="paymentTitle">Pembayaran QRIS</h3>
+    <div id="paymentStatusBanner" class="payment-status" role="status" aria-live="polite">Menunggu pembayaran</div>
+    <p style="margin:0 0 8px">Total yang harus dibayar</p>
+    <strong id="paymentAmount" style="font-size:24px;color:var(--neon-main)">Rp 0</strong>
+    <p class="payment-order-id" id="paymentOrderId"></p>
+    <img id="qrisImagePreview" class="payment-qr" src="" alt="QRIS pembayaran HADES">
+    <p class="payment-hint" id="qrisInstructions">Scan QRIS di atas, selesaikan pembayaran, lalu screenshot bukti transfer dan unggah di bawah.</p>
+    <label for="paymentProofFile" style="text-align:left">Screenshot bukti transfer *</label>
+    <input id="paymentProofFile" type="file" accept="image/jpeg,image/png,image/webp" required>
+    <p class="payment-hint" style="text-align:left">Format gambar JPG, PNG, atau WebP. Maksimal 5 MB. Jangan unggah data yang tidak berkaitan dengan pembayaran.</p>
+    <button class="btn-submit" id="uploadProofBtn" onclick="unggahBuktiPembayaran()">Unggah bukti & lanjut WhatsApp</button>
+    <button class="btn-submit" id="contactAdminAfterProof" type="button" style="display:none" onclick="hubungiAdminSetelahBukti()">Hubungi Admin di WhatsApp</button>
+    <button class="payment-secondary" id="closePaymentModalBtn" type="button" onclick="tutupModalPembayaran()">Nanti saja</button>
+    <p class="payment-hint" id="paymentNotice" role="status"></p>
+    <audio id="paymentProcessingSound" preload="auto" src="https://files.catbox.moe/ssfm3y.mp3"></audio>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // =========================================
+// LOGIKA TEKAN & TAHAN (HOLD TO UNLOCK)
+// =========================================
+let holdTimer;
+let holdProgress = 0;
+const circle = document.querySelector('.progress-ring__circle');
+const holdText = document.getElementById('holdText');
+
+function startHold() {
+  // Jika sudah 100%, jangan jalankan lagi
+  if (holdProgress >= 100) return;
+
+  holdText.innerText = "MEMBUKA AKSES...";
+  
+  // Update progress setiap 30 milidetik
+  holdTimer = setInterval(() => {
+    holdProgress += 2; // Naik 2% setiap putaran (butuh ~1.5 detik untuk 100%)
+    
+    // Update visual lingkaran
+    const offset = 339.292 - (holdProgress / 100) * 339.292;
+    circle.style.strokeDashoffset = offset;
+
+    // Jika sudah 100%, berhasil!
+    if (holdProgress >= 100) {
+      clearInterval(holdTimer);
+      holdText.innerText = "AKSES DIBERIKAN";
+      
+      // Mainkan video dan suara
+      if (typeof startLoadingVideo === 'function') {
+        startLoadingVideo();
+      }
+    }
+  }, 30); // 30ms * 50 putaran = 1500ms (1.5 detik)
+}
+
+function cancelHold() {
+  // Jika belum sampai 100% lalu dilepas, reset kembali ke 0
+  if (holdProgress < 100) {
+    clearInterval(holdTimer);
+    holdProgress = 0;
+    circle.style.strokeDashoffset = 339.292; // Reset lingkaran
+    holdText.innerText = "TEKAN & TAHAN UNTUK MASUK";
+  }
+}
+  // SUPABASE: data katalog dibaca dari tabel products.
+  const SUPABASE_URL = "https://wnmpislygiotwkhjrxjj.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_gfpUa-q849ujerNcFPlFow_QO8phCzR";
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  let dataApk = [];
+  let databaseVarian = {};
+  let storeSettings = { whatsapp_number: '6285712257150', banner_text: '', banner_image_url: '', home_video_neon_url: '', home_video_sakura_url: '', home_video_pixel_url: '', qris_image_url: '', qris_instructions: '' };
+  async function muatPengaturanToko() {
+    const { data, error } = await supabaseClient
+      .from('site_settings')
+      .select('whatsapp_number,banner_text,banner_image_url,home_video_neon_url,home_video_sakura_url,home_video_pixel_url,qris_image_url,qris_instructions')
+      .eq('id', 1)
+      .maybeSingle();
+
+    if (error) {
+      console.warn('Pengaturan toko belum dimuat dari Supabase:', error.message);
+      return;
+    }
+
+    if (data) storeSettings = { ...storeSettings, ...data };
+    sinkronkanVideoDariPengaturan();
+
+    const banner = document.getElementById('storeBanner');
+    if (!banner) return;
+    banner.replaceChildren();
+
+    if (storeSettings.banner_text || storeSettings.banner_image_url) {
+      banner.style.display = 'block';
+
+      if (storeSettings.banner_image_url) {
+        const img = document.createElement('img');
+        img.src = storeSettings.banner_image_url;
+        img.alt = 'Banner HADES';
+        img.style.cssText = 'width:100%;max-height:240px;object-fit:cover;border-radius:8px;display:block;margin-bottom:8px';
+        img.onerror = () => img.remove();
+        banner.appendChild(img);
+      }
+
+      if (storeSettings.banner_text) {
+        const text = document.createElement('div');
+        text.textContent = storeSettings.banner_text;
+        text.style.fontWeight = '800';
+        banner.appendChild(text);
+      }
+    } else {
+      banner.style.display = 'none';
+    }
+  }
+
+  function hubungiTokoLangsung() {
+    const nomor = String(storeSettings.whatsapp_number || '').replace(/\\D/g, '');
+    if (!nomor) {
+      alert('Nomor WhatsApp belum diatur. Silakan hubungi admin toko.');
+      return;
+    }
+    const pesan = 'Halo min, saya mengalami masalah dengan pesanan/layanan saya. Mohon dibantu ya.';
+    window.open('https://wa.me/' + nomor + '?text=' + encodeURIComponent(pesan), '_blank', 'noopener');
+  }
+
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[char]));
+  }
+
+  function urlGambar(apk) {
+    const image = String(apk.img || "").trim();
+    if (!image) return "https://placehold.co/100x100?text=HADES";
+    return /^https?:\/\//i.test(image) ? image : "https://raw.githubusercontent.com/hadesx0-droid/hade5/main/" + image;
+  }
+
+  async function muatProdukSupabase() {
+    const { data, error } = await supabaseClient
+      .from("products")
+      .select("id,name,base_price,image_url,category,active,packages,features")
+      .eq("active", true)
+      .order("created_at", { ascending: true });
+    if (error) {
+      console.error("Gagal memuat produk Supabase:", error.message);
+      document.getElementById("katalogGrid").innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-dim)">Katalog belum dapat dimuat. Periksa setup Supabase dan kebijakan RLS.</p>';
+      return;
+    }
+    dataApk = (data || []).map(p => ({
+      id: p.id,
+      nama: p.name,
+      harga: Number(p.base_price || 0),
+      img: p.image_url || "",
+      kategori: p.category || "Aplikasi",
+      active: p.active,
+      packages: Array.isArray(p.packages) ? p.packages : [],
+      features: Array.isArray(p.features) ? p.features.map(f => String(typeof f === "string" ? f : (f?.name || f?.label || "")).trim()).filter(Boolean) : []
+    }));
+    databaseVarian = {};
+    dataApk.forEach(p => {
+      databaseVarian[p.nama] = p.packages.length
+        ? p.packages.map(v => ({ nama: String(v.nama || v.name || "Paket"), harga: Number(v.harga ?? v.price ?? p.harga) }))
+        : [{ nama: "Harga standar", harga: p.harga }];
+    });
+    filterProduk();
+  }
+
+  let produkTerpilih = "";
+  let varianTerpilih = "";
+  let hargaTerpilih = 0;
+
+  // =========================================
+  // 1. LOADING SCREEN
+  // =========================================
+  const loadingScreen = document.getElementById('loadingScreen');
+  const loadingVideo = document.getElementById('loadingVideo');
+  const bgMusic = document.getElementById('bgMusic');
+  const btnStartLoading = document.getElementById('btnStartLoading');
+  const btnSkipLoading = document.getElementById('btnSkipLoading');
+  
+  const appContainer = document.getElementById('appContainer');
+  const bottomNav = document.getElementById('bottomNav');
+  
+  const katalogVideo = document.getElementById('katalogVideo');
+  const btnPlayKatalog = document.getElementById('btnPlayKatalog');
+  const btnPauseKatalog = document.getElementById('btnPauseKatalog');
+  katalogVideo.autoplay = false;
+  katalogVideo.preload = 'metadata';
+  katalogVideo.loop = true;
+  katalogVideo.playsInline = true;
+  katalogVideo.muted = false;
+  katalogVideo.defaultMuted = false;
+  katalogVideo.volume = 1;
+  katalogVideo.removeAttribute('muted');
+  // Video katalog tidak dimuat/ditampilkan selama layar loading agar mengurangi beban awal HP.
+  // Video mulai diputar setelah pengguna masuk ke toko.
+  function putarVideoKatalogOtomatis() {
+    katalogVideo.muted = false;
+    katalogVideo.volume = 1;
+    const janji = katalogVideo.play();
+    if (janji && typeof janji.catch === 'function') janji.catch(() => {
+      // Tidak menampilkan tombol play/pause; browser dapat membatasi autoplay bersuara.
+    });
+  }
+  // Jangan mulai video katalog di sini; tunggu sampai loading selesai.
+
+  function startLoadingVideo() {
+    loadingVideo.muted = false; 
+    loadingVideo.play().catch(e => { loadingVideo.muted = true; loadingVideo.play(); });
+    bgMusic.volume = 0.5; 
+    bgMusic.play().catch(e => console.log("Musik diblokir", e));
+    btnStartLoading.classList.add('hide');
+    btnSkipLoading.classList.remove('hide');
+  }
+
+  loadingVideo.addEventListener('ended', skipLoading);
+
+  let sudahMasukToko = false;
+  let wajibPilihTemaAwal = false;
+
+  function skipLoading() {
+    // Event video ended dan tombol Lewati sama-sama masuk ke alur ini,
+    // tetapi alur masuk hanya boleh dijalankan satu kali.
+    if (sudahMasukToko) return;
+    sudahMasukToko = true;
+
+    loadingVideo.pause();
+    loadingVideo.currentTime = 0;
+    bgMusic.pause();
+
+    loadingScreen.classList.add('hide');
+    appContainer.classList.add('show');
+    bottomNav.style.display = 'flex';
+
+    // Wajib pilih tema terlebih dahulu sebelum memilih produk atau membayar.
+    wajibPilihTemaAwal = true;
+    bukaMenuTema();
+
+    // Video katalog tetap disiapkan seperti perilaku sebelumnya.
+    putarVideoKatalogOtomatis();
+  }
+
+  // =========================================
+  // 2. KONTROL VIDEO KATALOG
+  // =========================================
+  function playKatalog(e) {
+    if(e) e.stopPropagation();
+    putarVideoKatalogOtomatis();
+  }
+
+  function pauseKatalog(e) {
+    if(e) e.stopPropagation();
+    // Kontrol pause sengaja tidak digunakan; video katalog berjalan otomatis.
+    putarVideoKatalogOtomatis();
+  }
+
+  // =========================================
+  // 3. KATALOG & MODAL LOGIC
+  // =========================================
+  function renderKatalog(data) {
+    const grid = document.getElementById('katalogGrid');
+    if (!grid) return;
+    // Bangun kartu di memori lalu masukkan sekaligus supaya katalog besar tidak
+    // mem-parsing ulang seluruh HTML untuk setiap produk.
+    const cards = data.map((apk) => {
+      const rpHarga = "Rp " + Number(apk.harga || 0).toLocaleString('id-ID');
+      const namaAman = escapeHTML(apk.nama);
+      const imgAman = escapeHTML(urlGambar(apk));
+      return `
+        <div class="product-card" data-product-name="${namaAman}" onclick="bukaModal(this.dataset.productName)">
+          <div class="card-top">
+            <img loading="lazy" decoding="async" src="${imgAman}" alt="${namaAman}" class="card-icon" onerror="this.src='https://placehold.co/100x100?text=HADES'">
+            <div><div class="card-title">${namaAman}</div></div>
+          </div>
+          <div class="card-price-wrap"><div class="price-main">${rpHarga}</div></div>
+          <div class="btn-buy">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            Beli
+          </div>
+          <div class="extra-card-actions" onclick="event.stopPropagation()">
+            <button type="button" data-extra-action="wish" data-name="${namaAman}" onclick="toggleWishlist(this.dataset.name)">♡ Favorit</button>
+            <button type="button" data-extra-action="compare" data-name="${namaAman}" onclick="toggleCompare(this.dataset.name)">⇄ Bandingkan</button>
+          </div>
+        </div>`;
+    });
+    grid.innerHTML = cards.join('');
+    updateExtraCounts();
+  }
+
+  const EXTRA_WISH_KEY = 'hades_index_wishlist_v1';
+  const EXTRA_COMPARE_KEY = 'hades_index_compare_v1';
+  let extraWishlist = JSON.parse(localStorage.getItem(EXTRA_WISH_KEY) || '[]');
+  let extraCompare = JSON.parse(localStorage.getItem(EXTRA_COMPARE_KEY) || '[]');
+  let extraWishlistMode = false;
+  let extraFeaturedMode = false;
+  function saveExtraLists(){ localStorage.setItem(EXTRA_WISH_KEY,JSON.stringify(extraWishlist)); localStorage.setItem(EXTRA_COMPARE_KEY,JSON.stringify(extraCompare)); updateExtraCounts(); }
+  function updateExtraCounts(){ const w=document.getElementById('wishlistCount'),c=document.getElementById('compareCount'); if(w)w.textContent=extraWishlist.length; if(c)c.textContent=extraCompare.length; document.querySelectorAll('[data-extra-action="wish"]').forEach(b=>{const on=extraWishlist.includes(b.dataset.name);b.classList.toggle('active',on);b.textContent=on?'♥ Favorit':'♡ Favorit'}); document.querySelectorAll('[data-extra-action="compare"]').forEach(b=>{const on=extraCompare.includes(b.dataset.name);b.classList.toggle('active',on);b.textContent=on?'✓ Dipilih':'⇄ Bandingkan'}); }
+  function toggleWishlist(nama){ extraWishlist=extraWishlist.includes(nama)?extraWishlist.filter(x=>x!==nama):[...extraWishlist,nama]; saveExtraLists(); if(extraWishlistMode)filterProduk(); }
+  function toggleWishlistView(){ extraWishlistMode=!extraWishlistMode; extraFeaturedMode=false; document.getElementById('extraFeaturedArea').style.display='none'; document.getElementById('showWishlistBtn').classList.toggle('active',extraWishlistMode); document.getElementById('showFeaturedBtn').classList.remove('active'); filterProduk(); }
+  function toggleFeatured(){ extraFeaturedMode=!extraFeaturedMode; extraWishlistMode=false; document.getElementById('extraFeaturedArea').style.display=extraFeaturedMode?'block':'none'; document.getElementById('showFeaturedBtn').classList.toggle('active',extraFeaturedMode); document.getElementById('showWishlistBtn').classList.remove('active'); if(extraFeaturedMode){const featured=dataApk.slice(0,3);renderKatalogTo('extraFeaturedGrid',featured);} filterProduk(); }
+  function renderKatalogTo(id,data){const old=document.getElementById('katalogGrid');const target=document.getElementById(id);if(!target)return;const prev=old.id;target.id='katalogGrid';renderKatalog(data);target.id=id;old.id=prev;updateExtraCounts();}
+  function toggleCompare(nama){ if(extraCompare.includes(nama))extraCompare=extraCompare.filter(x=>x!==nama);else if(extraCompare.length>=3){alert('Maksimal membandingkan 3 produk. Hapus salah satu pilihan terlebih dahulu.');return;}else extraCompare.push(nama); saveExtraLists(); }
+  function showCompare(){const panel=document.getElementById('extraComparePanel'); if(!extraCompare.length){panel.style.display='block';panel.innerHTML='Pilih produk lalu tekan Bandingkan untuk melihat perbandingan.';return;}const items=extraCompare.map(n=>dataApk.find(p=>p.nama===n)).filter(Boolean);panel.style.display='block';panel.innerHTML='<div class="extra-section-title">PERBANDINGAN PRODUK</div><table><thead><tr><th>Produk</th><th>Kategori</th><th>Harga mulai</th></tr></thead><tbody>'+items.map(p=>'<tr><td>'+escapeHTML(p.nama)+'</td><td>'+escapeHTML(p.kategori)+'</td><td>Rp '+Number(p.harga||0).toLocaleString('id-ID')+'</td></tr>').join('')+'</tbody></table><button type="button" onclick="clearCompare()" style="margin-top:8px">Kosongkan perbandingan</button>'; }
+  function clearCompare(){extraCompare=[];saveExtraLists();document.getElementById('extraComparePanel').style.display='none';}
+  function filterProduk() {
+    const keyword = document.getElementById('searchInput').value.toLowerCase();
+    let filtered = dataApk.filter(apk => apk.nama.toLowerCase().includes(keyword));
+    if(extraWishlistMode) filtered=filtered.filter(apk=>extraWishlist.includes(apk.nama));
+    renderKatalog(filtered); updateExtraCounts();
+    const note=document.getElementById('extraViewNote'); if(note){note.style.display=extraWishlistMode?'block':'none';note.textContent=extraWishlistMode?'Menampilkan produk yang kamu simpan di wishlist pada perangkat ini.':'';}
+  }
+
+  function bukaModal(nama) {
+    produkTerpilih = nama;
+    document.getElementById('modalTitle').innerText = nama;
+    const produkInfo = dataApk.find(p => p.nama === nama);
+    const fiturModal = document.getElementById('modalProductFeatures');
+    if (fiturModal) {
+      const fitur = produkInfo && Array.isArray(produkInfo.features) ? produkInfo.features : [];
+      fiturModal.innerHTML = fitur.length ? `<details class="feature-dropdown"><summary class="feature-summary">Lihat semua fitur produk</summary><div class="feature-list">${fitur.map(feature => `<span class="product-feature-chip">${escapeHTML(feature)}</span>`).join('')}</div></details>` : '';
+      fiturModal.style.display = fitur.length ? 'block' : 'none';
+    }
+    
+    const select = document.getElementById('varianSelect');
+    select.innerHTML = "";
+
+    const varianList = databaseVarian[nama] || [];
+    if (!varianList.length) {
+      alert("Paket produk belum tersedia.");
+      return;
+    }
+    varianList.forEach((v) => {
+      const option = document.createElement("option");
+      option.value = String(Number(v.harga || 0));
+      option.textContent = `${v.nama} - Rp ${Number(v.harga || 0).toLocaleString('id-ID')}`;
+      select.appendChild(option);
+    });
+    renderVariantOptions();
+    closeVariantPicker();
+
+    updateHarga();
+    document.getElementById('modalForm').classList.add('show');
+  }
+
+  function tutupModal() {
+    document.getElementById('modalForm').classList.remove('show');
+    document.getElementById('nama').value = "";
+  }
+
+  function renderVariantOptions() {
+    const select = document.getElementById('varianSelect');
+    const list = document.getElementById('variantOptions');
+    if (!select || !list) return;
+    list.innerHTML = '';
+    Array.from(select.options).forEach((option, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'variant-option' + (index === select.selectedIndex ? ' selected' : '');
+      button.setAttribute('role', 'option');
+      button.setAttribute('aria-selected', index === select.selectedIndex ? 'true' : 'false');
+      const label = document.createElement('span');
+      label.textContent = option.textContent;
+      const check = document.createElement('span');
+      check.className = 'variant-check';
+      check.textContent = index === select.selectedIndex ? '✓' : '';
+      button.append(label, check);
+      button.addEventListener('click', () => {
+        select.selectedIndex = index;
+        updateHarga();
+        closeVariantPicker();
+      });
+      list.appendChild(button);
+    });
+  }
+
+  function toggleVariantPicker() {
+    const picker = document.getElementById('variantPicker');
+    const trigger = document.getElementById('variantTrigger');
+    if (!picker || !trigger) return;
+    const isOpen = picker.classList.toggle('open');
+    trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+
+  function closeVariantPicker() {
+    const picker = document.getElementById('variantPicker');
+    const trigger = document.getElementById('variantTrigger');
+    if (picker) picker.classList.remove('open');
+    if (trigger) trigger.setAttribute('aria-expanded', 'false');
+  }
+
+  function updateHarga() {
+    const select = document.getElementById('varianSelect');
+    if (!select || select.selectedIndex < 0) return;
+    hargaTerpilih = parseInt(select.value, 10) || 0;
+    varianTerpilih = select.options[select.selectedIndex].text.split(' - ')[0];
+    const current = document.getElementById('variantCurrent');
+    if (current) current.textContent = select.options[select.selectedIndex].text;
+    document.getElementById('displayHarga').innerText = "Rp " + hargaTerpilih.toLocaleString('id-ID');
+    renderVariantOptions();
+  }
+
+  document.addEventListener('click', (event) => {
+    const picker = document.getElementById('variantPicker');
+    if (picker && !picker.contains(event.target)) closeVariantPicker();
+  });
+
+  let pesananQRISAktif = null;
+  let buktiPembayaranSudahTerkirim = false;
+  async function hubungiAdminSetelahBukti() {
+    if (!pesananQRISAktif || !buktiPembayaranSudahTerkirim) return;
+    const { data, error } = await supabaseClient.from('orders').select('status').eq('id', pesananQRISAktif.id).maybeSingle();
+    if (error || !data || !['Dibayar', 'Diproses', 'Selesai', 'Dibatalkan'].includes(String(data.status || '').trim())) {
+      document.getElementById('paymentNotice').textContent = 'Pembayaran belum dikonfirmasi Admin HADES. Silakan tunggu.';
+      document.getElementById('contactAdminAfterProof').style.display = 'none';
+      return;
+    }
+    bukaWhatsAppPesanan(pesananQRISAktif, true);
+  }
+  function bukaModalPembayaran(orderId, nama, pembayaran) {
+    if (paymentStatusPoller) { clearInterval(paymentStatusPoller); paymentStatusPoller = null; }
+    pesananQRISAktif = { id: orderId, nama, produk: produkTerpilih, paket: varianTerpilih, harga: Number(hargaTerpilih), pembayaran };
+    document.getElementById('paymentAmount').textContent = 'Rp ' + Number(hargaTerpilih).toLocaleString('id-ID');
+    document.getElementById('paymentOrderId').textContent = 'ID Pesanan: ' + orderId;
+    document.getElementById('qrisImagePreview').src = storeSettings.qris_image_url || '';
+    document.getElementById('qrisInstructions').textContent = storeSettings.qris_instructions || 'Scan QRIS di atas, selesaikan pembayaran, lalu screenshot bukti transfer dan unggah di bawah.';
+    document.getElementById('paymentProofFile').value = '';
+    document.getElementById('paymentNotice').textContent = '';
+    setStatusPembayaran('Menunggu pembayaran', '');
+    buktiPembayaranSudahTerkirim = false;
+    document.getElementById('uploadProofBtn').style.display = '';
+    document.getElementById('contactAdminAfterProof').style.display = 'none';
+    document.getElementById('closePaymentModalBtn').style.display = '';
+    document.getElementById('paymentProofFile').disabled = false;
+    document.getElementById('modalPembayaran').classList.add('show');
+  }
+  function setStatusPembayaran(teks, tipe) {
+    const banner = document.getElementById('paymentStatusBanner');
+    if (!banner) return;
+    banner.textContent = teks;
+    banner.className = 'payment-status' + (tipe ? ' ' + tipe : '');
+  }
+  function tutupModalPembayaran(konfirmasi = false) {
+    if (konfirmasi && !buktiPembayaranSudahTerkirim) {
+      const lanjut = confirm('Keluar dari halaman pembayaran? Pesanan tetap tersimpan dan kamu bisa membuka kembali detailnya melalui admin.');
+      if (!lanjut) return;
+    }
+    document.getElementById('modalPembayaran').classList.remove('show');
+    if (paymentStatusPoller) { clearInterval(paymentStatusPoller); paymentStatusPoller = null; }
+  }
+  function bukaWhatsAppPesanan(order, buktiSudahDiunggah) {
+    const waAdmin = String(storeSettings.whatsapp_number || '6285712257150').replace(/\D/g, '');
+    const pesan = `*ORDER HADES*\n\nHalo Admin HADES, saya sudah melakukan pemesanan.\n\nNama: ${order.nama}\nProduk: ${order.produk}\nPaket: ${order.paket}\nPembayaran: ${order.pembayaran}\nTotal: Rp ${Number(order.harga).toLocaleString('id-ID')}\nID Pesanan: ${order.id}\nBukti transfer: ${buktiSudahDiunggah ? 'Sudah diunggah melalui website' : 'Belum diunggah'}\n\nMohon bantu verifikasi dan lanjutkan pesanan saya. Terima kasih.`;
+    window.location.href = `https://wa.me/${waAdmin}?text=${encodeURIComponent(pesan)}`;
+  }
+  async function kirimPesanan() {
+    const nama = document.getElementById('nama').value.trim();
+    const pembayaran = document.getElementById('pembayaran').value;
+    const btn = document.getElementById('btnSubmit');
+    if (!nama) { alert('Mohon isi Nama Anda!'); return; }
+    if (pembayaran === 'QRIS' && !storeSettings.qris_image_url) { alert('QRIS belum disetel oleh admin. Silakan pilih DANA atau hubungi admin.'); return; }
+    btn.innerText = 'Memproses...'; btn.disabled = true;
+    const orderId = crypto.randomUUID();
+    const payload = { id: orderId, customer_name: nama, product_name: produkTerpilih, package_name: varianTerpilih, amount: Number(hargaTerpilih), payment_method: pembayaran, status: 'Menunggu pembayaran' };
+    try {
+      const { error } = await supabaseClient.from('orders').insert(payload);
+      if (error) throw error;
+      const order = { id: orderId, nama, produk: produkTerpilih, paket: varianTerpilih, harga: Number(hargaTerpilih), pembayaran };
+      if (pembayaran === 'QRIS') {
+        document.getElementById('modalForm').classList.remove('show');
+        bukaModalPembayaran(orderId, nama, pembayaran);
+      } else {
+        bukaWhatsAppPesanan(order, false);
+        tutupModal();
+      }
+    } catch (err) {
+      console.error('Tidak dapat membuat pesanan:', err);
+      alert('Pesanan gagal disimpan. Coba lagi beberapa saat. ' + (err?.message || ''));
+    } finally {
+      btn.innerText = 'Pesan Sekarang'; btn.disabled = false;
+    }
+  }
+  let paymentStatusPoller = null;
+  let paymentProcessingSoundPlayed = false;
+  let mediaPausedForPaymentSound = null;
+  function putarSuaraPembayaranDiproses() {
+    const audio = document.getElementById('paymentProcessingSound');
+    if (!audio || paymentProcessingSoundPlayed) return;
+    paymentProcessingSoundPlayed = true;
+
+    // Jeda media halaman utama agar suaranya tidak bertabrakan dengan pengumuman pembayaran.
+    const katalog = document.getElementById('katalogVideo');
+    const loading = document.getElementById('loadingVideo');
+    const musik = document.getElementById('bgMusic');
+    mediaPausedForPaymentSound = {
+      katalogWasPlaying: !!katalog && !katalog.paused,
+      loadingWasPlaying: !!loading && !loading.paused,
+      musicWasPlaying: !!musik && !musik.paused
+    };
+    if (katalog) katalog.pause();
+    if (loading) loading.pause();
+    if (musik) musik.pause();
+
+    const pulihkanMedia = () => {
+      const state = mediaPausedForPaymentSound;
+      mediaPausedForPaymentSound = null;
+      if (!state) return;
+      if (state.katalogWasPlaying && katalog) katalog.play().catch(() => {});
+      if (state.loadingWasPlaying && loading) loading.play().catch(() => {});
+      if (state.musicWasPlaying && musik) musik.play().catch(() => {});
+    };
+    audio.addEventListener('ended', pulihkanMedia, { once: true });
+    audio.addEventListener('error', pulihkanMedia, { once: true });
+    audio.currentTime = 0;
+    const playPromise = audio.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch(err => {
+        console.warn('Audio pembayaran tidak dapat diputar otomatis:', err);
+        // Jika browser memblokir audio, pulihkan media halaman utama.
+        pulihkanMedia();
+        paymentProcessingSoundPlayed = false;
+      });
+    }
+  }
+  async function cekKonfirmasiPembayaran() {
+    if (!pesananQRISAktif || !buktiPembayaranSudahTerkirim) return;
+    const info = document.getElementById('paymentNotice');
+    const button = document.getElementById('contactAdminAfterProof');
+    const { data, error } = await supabaseClient.from('orders').select('status').eq('id', pesananQRISAktif.id).maybeSingle();
+    if (error || !data) {
+      info.textContent = 'Belum bisa memuat status pesanan. Sistem akan mencoba lagi otomatis.';
+      return;
+    }
+    const status = String(data.status || '').trim().toLowerCase();
+    info.style.padding = '12px';
+    info.style.borderRadius = '10px';
+    if (status === 'menunggu pembayaran') {
+      setStatusPembayaran('Menunggu pembayaran', 'processing');
+      info.textContent = 'Pesanan tercatat dan menunggu pembayaran atau verifikasi bukti oleh Admin HADES.';
+      info.style.background = 'rgba(255,190,60,.12)';
+      button.style.display = 'none';
+      return;
+    }
+    if (status === 'dibayar' || status === 'berhasil' || status === 'pembayaran berhasil') {
+      setStatusPembayaran('Pembayaran berhasil', 'success');
+      info.textContent = 'Pembayaran sudah dikonfirmasi Admin HADES. Kamu bisa melanjutkan ke WhatsApp untuk detail pesanan.';
+      info.style.background = 'rgba(0,200,100,.12)';
+      button.style.display = '';
+      button.textContent = 'Lanjut ke WhatsApp Admin';
+      return;
+    }
+    if (status === 'diproses') {
+      setStatusPembayaran('Pesanan sedang diproses', 'processing');
+      info.textContent = 'Pembayaran sudah dikonfirmasi. Pesanan kamu sedang dikerjakan oleh Admin HADES.';
+      info.style.background = 'rgba(0,160,255,.12)';
+      button.style.display = '';
+      button.textContent = 'Hubungi Admin HADES';
+      return;
+    }
+    if (status === 'selesai') {
+      setStatusPembayaran('Pesanan selesai', 'success');
+      info.textContent = 'Pesanan ditandai selesai oleh Admin HADES. Hubungi admin jika masih membutuhkan bantuan.';
+      info.style.background = 'rgba(0,200,100,.12)';
+      button.style.display = '';
+      button.textContent = 'Hubungi Admin HADES';
+      return;
+    }
+    if (['dibatalkan', 'gagal', 'ditolak', 'pembayaran gagal', 'failed', 'cancelled'].includes(status)) {
+      if (paymentStatusPoller) { clearInterval(paymentStatusPoller); paymentStatusPoller = null; }
+      setStatusPembayaran('Pembayaran gagal / pesanan dibatalkan', 'failed');
+      info.textContent = 'Pesanan dibatalkan atau pembayaran ditolak oleh Admin HADES. Silakan hubungi admin jika ini tidak sesuai.';
+      info.style.background = 'rgba(255,60,80,.12)';
+      button.style.display = '';
+      button.textContent = 'Hubungi Admin HADES';
+      return;
+    }
+    setStatusPembayaran('Status pesanan: ' + (data.status || 'belum diketahui'), 'processing');
+    info.textContent = 'Status pesanan diterima tetapi belum dikenali. Muat ulang atau hubungi Admin HADES.';
+    button.style.display = 'none';
+  }
+  function mulaiPantauKonfirmasiPembayaran() {
+    if (paymentStatusPoller) clearInterval(paymentStatusPoller);
+    cekKonfirmasiPembayaran();
+    paymentStatusPoller = setInterval(cekKonfirmasiPembayaran, 5000);
+  }
+
+  async function unggahBuktiPembayaran() {
+    if (!pesananQRISAktif) { alert('Data pesanan tidak ditemukan. Silakan ulangi pemesanan.'); return; }
+    const file = document.getElementById('paymentProofFile').files[0];
+    const btn = document.getElementById('uploadProofBtn');
+    const info = document.getElementById('paymentNotice');
+    if (!file) { info.textContent = 'Pilih screenshot bukti transfer terlebih dahulu.'; return; }
+    if (!['image/jpeg','image/png','image/webp'].includes(file.type)) { info.textContent = 'Format harus JPG, PNG, atau WebP.'; return; }
+    if (file.size > 5 * 1024 * 1024) { info.textContent = 'Ukuran gambar maksimal 5 MB.'; return; }
+    btn.disabled = true; btn.textContent = 'Mengunggah bukti...'; info.textContent = 'Mengunggah screenshot bukti pembayaran dengan aman...';
+    try {
+      const ext = file.type === 'image/png' ? 'png' : file.type === 'image/webp' ? 'webp' : 'jpg';
+      const path = `proofs/${pesananQRISAktif.id}/${Date.now()}.${ext}`;
+      const upload = await supabaseClient.storage.from('payment-proofs').upload(path, file, { upsert: false, contentType: file.type });
+      if (upload.error) throw new Error('Upload bukti gagal: ' + upload.error.message + '. Pastikan SQL tambahan sudah dijalankan.');
+      const { error: rpcError } = await supabaseClient.rpc('submit_order_payment_proof', { p_order_id: pesananQRISAktif.id, p_proof_path: path });
+      if (rpcError) throw new Error('Bukti sudah diunggah tetapi belum tertaut ke pesanan: ' + rpcError.message + '. Hubungi admin dan sebutkan ID pesanan ' + pesananQRISAktif.id);
+      buktiPembayaranSudahTerkirim = true;
+      setStatusPembayaran('Pembayaran sedang diproses', 'processing');
+      info.textContent = 'Bukti transfer berhasil dikirim. Pembayaran kamu sedang menunggu verifikasi Admin HADES. Jangan tutup halaman ini. Nomor/kontak admin baru akan ditampilkan setelah admin mengonfirmasi pembayaran di panel.';
+      putarSuaraPembayaranDiproses();
+      info.style.padding = '12px';
+      info.style.borderRadius = '10px';
+      info.style.background = 'rgba(255,190,60,.12)';
+      document.getElementById('uploadProofBtn').style.display = 'none';
+      document.getElementById('paymentProofFile').disabled = true;
+      document.getElementById('closePaymentModalBtn').style.display = 'none';
+      document.getElementById('contactAdminAfterProof').style.display = 'none';
+      mulaiPantauKonfirmasiPembayaran();
+    } catch (err) {
+      console.error(err);
+      setStatusPembayaran('Pembayaran gagal diproses', 'failed');
+      info.textContent = err.message || 'Gagal mengunggah bukti. Silakan coba lagi.';
+    } finally { btn.disabled = false; btn.textContent = 'Unggah bukti & lanjut WhatsApp'; }
+  }
+
+
+  // =========================================
+  // 4. LOGIKA TEMA (NEON, DARK, COMIC)
+  // =========================================
+  const temaNeon = [
+    { main: "#00e5ff", glow: "rgba(0, 229, 255, 0.4)", tint: "transparent", filter: "none" },
+    { main: "#a855f7", glow: "rgba(168, 85, 247, 0.4)", tint: "transparent", filter: "none" },
+    { main: "#ff007f", glow: "rgba(255, 0, 127, 0.4)", tint: "transparent", filter: "none" },
+    { main: "#00ff88", glow: "rgba(0, 255, 136, 0.4)", tint: "transparent", filter: "none" },
+    { main: "#ffd700", glow: "rgba(255, 215, 0, 0.4)", tint: "transparent", filter: "none" }
+  ];
+  let indexWarna = 0;
+  
+  // Mode: 0 = Neon, 1 = Sakura, 2 = Pixel
+  let modeSekarang = 0;
+
+  // Video katalog berbeda untuk setiap tema. Loading screen tidak diubah.
+  const videoTemaDefault = [
+    "https://yourimageshare.com/ib/4B8VItuqxY.mp4", // Neon
+    "https://yourimageshare.com/ib/qKOQuXthVa.mp4", // Sakura
+    "https://files.catbox.moe/ejenar.mp4"  // Pixel
+  ];
+  let videoTema = [...videoTemaDefault];
+  function sinkronkanVideoDariPengaturan() {
+    const urls = [storeSettings.home_video_neon_url, storeSettings.home_video_sakura_url, storeSettings.home_video_pixel_url];
+    videoTema = videoTemaDefault.map((fallback, i) => {
+      const candidate = String(urls[i] || '').trim();
+      return /^https:\/\//i.test(candidate) ? candidate : fallback;
+    });
+    // Jika tema yang sedang aktif sudah punya URL baru, langsung perbarui videonya.
+    gantiVideoKatalog(true);
+  }
+
+  function gantiVideoKatalog(forceReload = false) {
+    const video = document.getElementById('katalogVideo');
+    if (!video) return;
+    const urlVideo = videoTema[modeSekarang];
+    const source = video.querySelector('source');
+    if (!source || (!forceReload && source.getAttribute('src') === urlVideo)) return;
+    source.setAttribute('src', urlVideo);
+    // Putar video tema yang dipilih secara otomatis dengan suara.
+    video.autoplay = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.muted = false;
+    video.volume = 1;
+    video.removeAttribute('muted');
+    video.load();
+    const janji = video.play();
+    if (janji && typeof janji.catch === 'function') janji.catch(() => {
+      // Autoplay bersuara masih dapat dibatasi oleh kebijakan browser/perangkat.
+    });
+  }
+
+  // Ganti Warna Neon (Hanya berfungsi saat di Mode Neon)
+  function gantiWarnaNeon() {
+    if (modeSekarang !== 0) {
+      alert("Ganti warna hanya tersedia di Mode Neon. Silakan ganti ke Mode Neon terlebih dahulu.");
+      return;
+    }
+    indexWarna++;
+    if (indexWarna >= temaNeon.length) indexWarna = 0;
+    const tema = temaNeon[indexWarna];
+    const root = document.documentElement;
+    root.style.setProperty('--neon-main', tema.main);
+    root.style.setProperty('--neon-glow', tema.glow);
+    root.style.setProperty('--video-tint', tema.tint);
+    root.style.setProperty('--video-filter', tema.filter);
+  }
+
+  // Menu tema dengan pilihan langsung: Neon, Sakura, Pixel
+function bukaMenuTema() {
+  const menu = document.getElementById('themeMenuBackdrop');
+  if (!menu) return;
+  menu.classList.add('open');
+  menu.classList.toggle('theme-required', !!wajibPilihTemaAwal);
+  menu.setAttribute('aria-hidden', 'false');
+  perbaruiPilihanTema();
+}
+function tutupMenuTema() {
+  // Saat pertama masuk, menu hanya boleh ditutup setelah pengguna memilih tema.
+  if (wajibPilihTemaAwal) return;
+  const menu = document.getElementById('themeMenuBackdrop');
+  if (!menu) return;
+  menu.classList.remove('open');
+  menu.setAttribute('aria-hidden', 'true');
+}
+function klikBackdropTema(event) {
+  if (wajibPilihTemaAwal) return;
+  if (event.target && event.target.id === 'themeMenuBackdrop') tutupMenuTema();
+}
+function perbaruiPilihanTema() {
+  document.querySelectorAll('.theme-option').forEach(btn => {
+    btn.classList.toggle('active', Number(btn.dataset.theme) === modeSekarang);
+  });
+}
+function pilihTema(mode) {
+  modeSekarang = Number(mode);
+  const body = document.body;
+  const modeIcon = document.getElementById('modeIcon');
+  body.classList.remove('theme-sakura', 'theme-pixel');
+
+  if (modeSekarang === 0) {
+    modeIcon.innerHTML = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/>';
+    indexWarna = 0;
+    document.documentElement.style.setProperty('--neon-main', '#00e5ff');
+    document.documentElement.style.setProperty('--neon-glow', 'rgba(0, 229, 255, 0.4)');
+    document.documentElement.style.setProperty('--video-tint', 'transparent');
+    document.documentElement.style.setProperty('--video-filter', 'none');
+  } else if (modeSekarang === 1) {
+    body.classList.add('theme-sakura');
+    modeIcon.innerHTML = '<path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/>';
+  } else {
+    body.classList.add('theme-pixel');
+    modeIcon.innerHTML = '<path d="M12 3l2.2 5.2L20 6l-2.2 5.8L23 14l-5.5 2.2L19 22l-7-3-7 3 1.5-5.8L1 14l5.2-2.2L4 6l5.8 2.2L12 3Z"/>';
+  }
+  gantiVideoKatalog();
+  perbaruiPilihanTema();
+  // Pilihan tema pertama mengizinkan pengguna melanjutkan ke katalog dan checkout.
+  wajibPilihTemaAwal = false;
+  tutupMenuTema();
+}
+// Tetap mendukung pemanggilan lama jika dibutuhkan
+function gantiModeTema() { bukaMenuTema(); }
+
+  // INISIALISASI: ambil katalog aktif dari Supabase.
+  muatPengaturanToko();
+  muatProdukSupabase();
+</script>
+
+</body>
+</html>
